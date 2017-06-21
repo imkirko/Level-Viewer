@@ -1,28 +1,22 @@
 #include "mainwindow.h"
+#include "subwindow.h"
 #include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent), mdiArea(new QMdiArea(this))
+	: QMainWindow(parent)
 {
-	// Window basics
-	resize(500, 400);
-
-	mdiArea->setViewMode(QMdiArea::TabbedView);
-	mdiArea->setTabsClosable(true);
-	mdiArea->setTabsMovable(true);
-	setCentralWidget(mdiArea);
-
-	// Restore
 	restoreSettings();
+	connect(this, SIGNAL(close), this, SLOT(closeEvent));
 
-	// Continue to fill widgets
-	completeWindow();
+	// Complete window
+	createActions();
+	createBaseWidgets();
 }
 
-// Set window to how user left it
-// TODO: allow user to disable this
 void MainWindow::restoreSettings()
 {
+	resize(500, 400); // Default size
+
 	QSettings settings;
 	settings.beginGroup("windowState");
 	restoreGeometry(settings.value("geometry").toByteArray());
@@ -30,18 +24,47 @@ void MainWindow::restoreSettings()
 	settings.endGroup();
 }
 
-// continue to add widgets and crap to window
-void MainWindow::completeWindow()
+void MainWindow::createActions()
 {
-	connect(this, SIGNAL(close), this, SLOT(closeEvent));
+	openFileAction = new QAction(tr("&Open"), this);
+	closeFileAction = new QAction(tr("&Close"), this);
+	exportPngAction = new QAction(tr("&PNG"), this);
+	aboutAction = new QAction(tr("&About"), this);
 }
 
-// Window is closing, do required actions
+void MainWindow::createBaseWidgets()
+{
+	// Central
+	mdiArea = new QMdiArea(this);
+	mdiArea->setViewMode(QMdiArea::TabbedView);
+	mdiArea->setTabsClosable(true);
+	mdiArea->setTabsMovable(true);
+	setCentralWidget(mdiArea);
+
+	// Menu
+	menuBar = new QMenuBar(this);
+	setMenuBar(menuBar);
+	fileMenu = menuBar->addMenu("&File");
+	fileMenu->addAction(openFileAction);
+	fileMenu->addAction(closeFileAction);
+	fileExportMenu = fileMenu->addMenu("&Export");
+	fileExportMenu->addAction(exportPngAction);
+	helpMenu = menuBar->addMenu("&Help");
+	helpMenu->addAction(aboutAction);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+	// Save Window State
 	QSettings settings;
 	settings.beginGroup("windowState");
 	settings.setValue("geometry", saveGeometry());
 	settings.setValue("state", saveState());
 	settings.endGroup();
+}
+
+void MainWindow::openTestLevel()
+{
+	// open subwindow with test level
+	// will do loading file stuff later
 }

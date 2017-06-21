@@ -1,6 +1,6 @@
 /*
 	Created by Kirko <kirko1029@gmail.com>
-	June 19, 2017
+	Started June 19, 2017
 */
 
 #include "mainwindow.h"

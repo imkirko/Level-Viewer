@@ -3,6 +3,9 @@
 #include <QMainWindow>
 #include <QMdiArea>
 #include <QToolBar>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
 
 class MainWindow : public QMainWindow
 {
@@ -15,7 +18,19 @@ class MainWindow : public QMainWindow
 	void closeEvent(QCloseEvent *event);
 
 	void restoreSettings();
-	void completeWindow();
+	void createBaseWidgets();
+	void createActions();
+	void openTestLevel();
 
+	QMenuBar *menuBar;
 	QMdiArea *mdiArea;
+
+	QMenu *fileMenu;
+	QAction *openFileAction;
+	QAction *closeFileAction;
+	QMenu *fileExportMenu;
+	QAction *exportPngAction;
+
+	QMenu *helpMenu;
+	QAction *aboutAction;
 };
