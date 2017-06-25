@@ -1,8 +1,8 @@
 #pragma once
 
+#include "windowmanager.h"
 #include <QMainWindow>
-#include <QMdiArea>
-#include <QToolBar>
+#include <QStatusBar>
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
@@ -12,18 +12,19 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 	public:
-	MainWindow(QWidget *parent = Q_NULLPTR);
+	MainWindow();
+
+	void openFile(const QString &fileName);
 
 	private:
 	void closeEvent(QCloseEvent *event);
-
-	void restoreSettings();
-	void createBaseWidgets();
+	void readSettings();
 	void createActions();
-	void openTestLevel();
+	void createStatusBar();
 
 	QMenuBar *menuBar;
-	QMdiArea *mdiArea;
+	QStatusBar *windowStatusBar;
+	WindowManager *windowManager;
 
 	QMenu *fileMenu;
 	QAction *openFileAction;
@@ -33,4 +34,8 @@ class MainWindow : public QMainWindow
 
 	QMenu *helpMenu;
 	QAction *aboutAction;
+
+	private slots:
+	void promptForFile();
+	void viewAboutPage();
 };
